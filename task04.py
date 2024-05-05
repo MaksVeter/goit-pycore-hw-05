@@ -3,6 +3,7 @@ from functools import wraps
 def input_error(func):
     @wraps(func)
     def inner(*args, **kwargs):
+        print('e')
         try:
             return func(*args, **kwargs)
         except ValueError as error:
@@ -12,6 +13,26 @@ def input_error(func):
 
     return inner
 
+def require_two_args(func):
+    @wraps(func)
+    def inner(args, contacts):
+        print('2')
+        if (len(args) != 2):
+            raise ValueError('Operation Requires 2 args: name and phone')
+        return func(args, contacts)
+    
+    return inner
+
+
+def name_min_length(func):
+    @wraps(func)
+    def inner(args, contacts):
+        print(3)
+        if (len(args[0])<= 3):
+            raise ValueError('Name should be more the 3 symbols')
+        return func(args, contacts)
+
+    return inner
 
 def parse_input(user_input):
     cmd, *args = user_input.split()
@@ -20,9 +41,9 @@ def parse_input(user_input):
 
 
 @input_error
+@require_two_args
+@name_min_length
 def add_contact(args, contacts):
-    if (len(args) != 2):
-        raise ValueError('Operation Requires 2 args: name and phone')
     name, phone = args
     if (not (name and phone)):
         raise ValueError('Name and phone shouldn\'t be empty')
@@ -34,9 +55,9 @@ def add_contact(args, contacts):
     return "Contact added."
 
 @input_error
+@require_two_args
+@name_min_length
 def change_contact(args, contacts):
-    if (len(args) != 2):
-        raise ValueError('Operation Requires 2 args: name and phone')
     name, phone = args
     if (not (name and phone)):
         raise ValueError('Name and phone shouldn\'t be empty')
