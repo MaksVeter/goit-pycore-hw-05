@@ -3,7 +3,6 @@ from functools import wraps
 def input_error(func):
     @wraps(func)
     def inner(*args, **kwargs):
-        print('e')
         try:
             return func(*args, **kwargs)
         except ValueError as error:
@@ -16,7 +15,6 @@ def input_error(func):
 def require_two_args(func):
     @wraps(func)
     def inner(args, contacts):
-        print('2')
         if (len(args) != 2):
             raise ValueError('Operation Requires 2 args: name and phone')
         return func(args, contacts)
@@ -27,7 +25,6 @@ def require_two_args(func):
 def name_min_length(func):
     @wraps(func)
     def inner(args, contacts):
-        print(3)
         if (len(args[0])<= 3):
             raise ValueError('Name should be more the 3 symbols')
         return func(args, contacts)
